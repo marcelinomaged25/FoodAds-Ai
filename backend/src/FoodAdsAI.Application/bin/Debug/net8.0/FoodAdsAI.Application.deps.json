@@ -1,0 +1,39 @@
+{
+  "runtimeTarget": {
+    "name": ".NETCoreApp,Version=v8.0",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETCoreApp,Version=v8.0": {
+      "FoodAdsAI.Application/1.0.0": {
+        "dependencies": {
+          "FoodAdsAI.Domain": "1.0.0"
+        },
+        "runtime": {
+          "FoodAdsAI.Application.dll": {}
+        }
+      },
+      "FoodAdsAI.Domain/1.0.0": {
+        "runtime": {
+          "FoodAdsAI.Domain.dll": {
+            "assemblyVersion": "1.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "FoodAdsAI.Application/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "FoodAdsAI.Domain/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}

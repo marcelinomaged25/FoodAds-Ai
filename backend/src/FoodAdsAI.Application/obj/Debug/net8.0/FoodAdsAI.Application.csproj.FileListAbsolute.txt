@@ -1,0 +1,15 @@
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\bin\Debug\net8.0\FoodAdsAI.Application.deps.json
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\bin\Debug\net8.0\FoodAdsAI.Application.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\bin\Debug\net8.0\FoodAdsAI.Application.pdb
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\bin\Debug\net8.0\FoodAdsAI.Domain.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\bin\Debug\net8.0\FoodAdsAI.Domain.pdb
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.csproj.AssemblyReference.cache
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.GeneratedMSBuildEditorConfig.editorconfig
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.AssemblyInfoInputs.cache
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.AssemblyInfo.cs
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.csproj.CoreCompileInputs.cache
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsA.FB853AFB.Up2Date
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\refint\FoodAdsAI.Application.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\FoodAdsAI.Application.pdb
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Application\obj\Debug\net8.0\ref\FoodAdsAI.Application.dll

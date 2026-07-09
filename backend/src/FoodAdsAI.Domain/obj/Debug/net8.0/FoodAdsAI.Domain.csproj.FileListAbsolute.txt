@@ -1,0 +1,11 @@
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\bin\Debug\net8.0\FoodAdsAI.Domain.deps.json
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\bin\Debug\net8.0\FoodAdsAI.Domain.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\bin\Debug\net8.0\FoodAdsAI.Domain.pdb
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\FoodAdsAI.Domain.GeneratedMSBuildEditorConfig.editorconfig
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\FoodAdsAI.Domain.AssemblyInfoInputs.cache
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\FoodAdsAI.Domain.AssemblyInfo.cs
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\FoodAdsAI.Domain.csproj.CoreCompileInputs.cache
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\FoodAdsAI.Domain.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\refint\FoodAdsAI.Domain.dll
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\FoodAdsAI.Domain.pdb
+E:\marc\projects\Food Image Generation\backend\src\FoodAdsAI.Domain\obj\Debug\net8.0\ref\FoodAdsAI.Domain.dll
