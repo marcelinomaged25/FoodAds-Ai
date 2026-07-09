@@ -1,53 +1,77 @@
 # FoodAds AI
 
-FoodAds AI is a restaurant-focused AI SaaS platform for generating marketing campaigns, food images, ad copy, captions, hashtags, and promotional content.
+FoodAds AI is a restaurant marketing studio that turns one prompt into:
 
-This repository now contains a working monorepo scaffold with:
+- generated food imagery
+- campaign headlines and captions
+- Google Ads, Instagram, TikTok, email, SMS, and push content
+- downloadable campaign reports
+- saved history with image previews and favorites
 
-- `frontend/` for the React 19 customer experience
-- `backend/` for the ASP.NET Core API and business logic
-- `python-ai-service/` for FastAPI-based AI orchestration
-- `database/` for schema and migration planning
-- `docs/` for architecture, API, and implementation notes
-- `docker/` for local development orchestration
+## Project Structure
 
-The existing notebook and adapter artifacts are preserved as the source of truth for the current image-generation workflow:
+- `frontend/` - React 19 + Vite UI
+- `backend/` - ASP.NET Core API and persistence
+- `python-ai-service/` - FastAPI AI orchestration layer
+- `database/` - schema and migration notes
 
-- `Food Image Generation-SD+LoRA.ipynb`
-- `adapter_config.json`
-- `adapter_model.safetensors`
-
-## Target Architecture
-
-```mermaid
-flowchart TD
-    A[React 19 Frontend] --> B[ASP.NET Core 9 API]
-    B --> C[Python FastAPI AI Service]
-    C --> D[Base Image Model]
-    C --> E[LoRA Fine-tuned Model]
-    C --> F[Prompt Intelligence]
-    B --> G[(PostgreSQL)]
-    B --> H[Identity, JWT, EF Core Persistence]
-```
-
-## What the scaffold covers
+## Key Features
 
 - Prompt enhancement before image generation
-- Base and LoRA AI service boundaries with prompt/copy generation
-- Clean Architecture backend layout
-- A working ASP.NET Core API host
-- A working React 19/Vite frontend shell
-- PostgreSQL + EF Core persistence with a code-first migration
-- Docker-friendly local development setup
+- Image generation with Base or LoRA workflows
+- Campaign copy generation in one pass
+- History page with selectable saved campaigns
+- Favorites for saved campaigns
+- Campaign reports with embedded image previews
+- Downloadable generated images and HTML reports
 
-## Verified locally
+## Local Setup
 
-- `dotnet build backend/FoodAdsAI.sln`
-- `npm run build` in `frontend/`
+### Frontend
 
-## Next steps
+```bash
+cd frontend
+npm install
+npm run dev
+```
 
-1. Apply the EF Core migrations to a PostgreSQL instance.
-2. Start the backend, frontend, and Python AI service together with production environment variables.
-3. Add integration tests for authenticated campaign, image-generation, and history flows.
-# FoodAds-Ai
+### Backend
+
+```bash
+cd backend
+dotnet build
+dotnet run --project src/FoodAdsAI.Api
+```
+
+### Python AI Service
+
+```bash
+cd python-ai-service
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+```
+
+## Environment Variables
+
+Set the API URLs so the frontend and backend can reach each other:
+
+- `VITE_API_URL`
+- backend AI service base URL
+- database connection string
+- JWT/auth settings
+
+## Current Notes
+
+- The Generate page now shows the image, campaign text, and a compact completion summary when all outputs are ready.
+- History reports include the saved campaign image instead of raw JSON.
+- Saved campaigns keep their image data so reports and previews stay useful later.
+
+## Build Verification
+
+- Frontend: `npm run build`
+- Backend: `dotnet build`
+
+## Deployment
+
+This project is deployable once the backend, frontend, Python service, and database are configured for production.
+
