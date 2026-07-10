@@ -49,11 +49,40 @@ class MarketingService:
                 if lines[-1].startswith("```"):
                     lines = lines[:-1]
                 payload = "\n".join(lines).strip()
-            
-            return CampaignResponse.model_validate(json.loads(payload))
+
+            return CampaignResponse.model_validate(self._normalize_payload(json.loads(payload)))
         except Exception as exc:
             logger.error(f"Campaign generation failed: {exc}", exc_info=True)
             return self._fallback(request)
+
+    @staticmethod
+    def _normalize_payload(payload: dict) -> dict:
+        calendar = payload.get("content_calendar")
+        if isinstance(calendar, list):
+            normalized_calendar: list[str] = []
+            for item in calendar:
+                normalized_item = MarketingService._normalize_calendar_item(item)
+                if normalized_item:
+                    normalized_calendar.append(normalized_item)
+            payload["content_calendar"] = normalized_calendar
+        return payload
+
+    @staticmethod
+    def _normalize_calendar_item(item: object) -> str:
+        if isinstance(item, str):
+            return item.strip()
+
+        if isinstance(item, dict):
+            day = str(item.get("day", "")).strip()
+            post = str(item.get("post", "")).strip()
+            if day and post:
+                return f"{day}: {post}"
+            if day:
+                return day
+            if post:
+                return post
+
+        return str(item).strip()
 
     def _fallback(self, request: CampaignRequest) -> CampaignResponse:
         base = request.prompt.strip().rstrip(".")

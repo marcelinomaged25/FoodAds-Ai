@@ -20,8 +20,8 @@ export function LoginPage() {
   const form = useForm<FormValues>({
     resolver: zodResolver(schema),
     defaultValues: {
-      email: 'owner@foodads.ai',
-      password: 'Owner123!',
+      email: '',
+      password: '',
     },
   });
 

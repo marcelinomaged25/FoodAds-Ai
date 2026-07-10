@@ -68,6 +68,14 @@ using (var scope = app.Services.CreateScope())
         await db.Database.EnsureCreatedAsync();
     }
 
+    // Repair older databases that were created before campaign image columns existed.
+    await db.Database.ExecuteSqlRawAsync("""
+        ALTER TABLE "campaigns"
+        ADD COLUMN IF NOT EXISTS "ImageFileName" character varying(300),
+        ADD COLUMN IF NOT EXISTS "ImageContentType" character varying(120),
+        ADD COLUMN IF NOT EXISTS "ImageBase64Data" text;
+        """);
+
     // Default data seeding removed per user request
     // await FoodAdsAiDbSeeder.SeedAsync(db);
 }
