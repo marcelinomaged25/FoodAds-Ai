@@ -60,6 +60,7 @@ public sealed class GenerationService
         {
             _store.AddCampaign(new Campaign
             {
+                UserId = userId,
                 RestaurantId = null,
                 Prompt = request.Prompt,
                 Headline = response.Headline,
@@ -87,8 +88,8 @@ public sealed class GenerationService
         return response;
     }
 
-    public IReadOnlyCollection<CampaignListItem> GetCampaignHistory()
-        => _store.Campaigns
+    public IReadOnlyCollection<CampaignListItem> GetCampaignHistoryForUser(Guid userId)
+        => _store.GetCampaigns(userId)
             .OrderByDescending(x => x.CreatedAt)
             .Select(x =>
             {

@@ -126,7 +126,16 @@ public static class Endpoints
         });
         generation.MapPost("/video-script", () => Results.Ok(new { script = "Create a punchy 15-second restaurant reel script." }));
 
-        generation.MapGet("/campaigns", (GenerationService service) => Results.Ok(service.GetCampaignHistory()));
+        generation.MapGet("/campaigns", (ClaimsPrincipal user, GenerationService service) =>
+        {
+            var userId = GetCurrentUserId(user);
+            if (userId is null)
+            {
+                return Results.Unauthorized();
+            }
+
+            return Results.Ok(service.GetCampaignHistoryForUser(userId.Value));
+        });
 
         var history = api.MapGroup("/history").RequireAuthorization();
         history.MapGet("/", (ClaimsPrincipal user, IRepositoryStore store) =>
@@ -137,9 +146,7 @@ public static class Endpoints
                 return Results.Unauthorized();
             }
 
-            var items = store.PromptHistory
-                .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.CreatedAt);
+            var items = store.GetPromptHistory(userId);
             return Results.Ok(items);
         });
         history.MapDelete("/{id:guid}", async (Guid id, ClaimsPrincipal user, IRepositoryStore store, CancellationToken ct) =>
@@ -151,7 +158,7 @@ public static class Endpoints
             }
 
             var currentUserId = userId.Value;
-            var item = store.PromptHistory.FirstOrDefault(x => x.Id == id && x.UserId == currentUserId);
+            var item = store.GetPromptHistory(currentUserId).FirstOrDefault(x => x.Id == id);
             if (item is null)
             {
                 return Results.NotFound();
@@ -171,9 +178,7 @@ public static class Endpoints
                 return Results.Unauthorized();
             }
 
-            var items = store.Favorites
-                .Where(x => x.UserId == userId)
-                .OrderByDescending(x => x.CreatedAt);
+            var items = store.GetFavorites(userId.Value);
             return Results.Ok(items);
         });
         favorites.MapPost("/", async (FavoriteRequest request, ClaimsPrincipal user, IRepositoryStore store, CancellationToken ct) =>
@@ -207,7 +212,7 @@ public static class Endpoints
                 return Results.Unauthorized();
             }
 
-            var exists = store.Campaigns.Any(x => x.Id == campaignId);
+            var exists = store.GetCampaigns(userId.Value).Any(x => x.Id == campaignId);
             if (!exists)
             {
                 return Results.NotFound();
@@ -231,7 +236,7 @@ public static class Endpoints
             }
 
             var currentUserId = userId.Value;
-            var favorite = store.Favorites.FirstOrDefault(x => x.Id == id && x.UserId == currentUserId);
+            var favorite = store.GetFavorites(currentUserId).FirstOrDefault(x => x.Id == id);
             if (favorite is null)
             {
                 return Results.NotFound();
@@ -243,12 +248,30 @@ public static class Endpoints
         });
 
         var restaurants = api.MapGroup("/restaurants").RequireAuthorization();
-        restaurants.MapGet("/", (RestaurantService service) => Results.Ok(service.GetAll()));
-        restaurants.MapPost("/", async (CreateRestaurantRequest request, RestaurantService service, CancellationToken ct)
-            => Results.Ok(await service.CreateAsync(request.Name, request.CuisineType, request.BrandTone, request.WebsiteUrl, request.LogoUrl, ct)));
-        restaurants.MapPut("/{id:guid}", async (Guid id, CreateRestaurantRequest request, IRepositoryStore store, CancellationToken ct) =>
+        restaurants.MapGet("/", (ClaimsPrincipal user, RestaurantService service) =>
         {
-            var existing = store.Restaurants.FirstOrDefault(x => x.Id == id);
+            var userId = GetCurrentUserId(user);
+            return userId is null ? Results.Unauthorized() : Results.Ok(service.GetAll(userId.Value));
+        });
+        restaurants.MapPost("/", async (CreateRestaurantRequest request, ClaimsPrincipal user, RestaurantService service, CancellationToken ct) =>
+        {
+            var userId = GetCurrentUserId(user);
+            if (userId is null)
+            {
+                return Results.Unauthorized();
+            }
+
+            return Results.Ok(await service.CreateAsync(userId.Value, request.Name, request.CuisineType, request.BrandTone, request.WebsiteUrl, request.LogoUrl, ct));
+        });
+        restaurants.MapPut("/{id:guid}", async (Guid id, CreateRestaurantRequest request, ClaimsPrincipal user, IRepositoryStore store, CancellationToken ct) =>
+        {
+            var userId = GetCurrentUserId(user);
+            if (userId is null)
+            {
+                return Results.Unauthorized();
+            }
+
+            var existing = store.GetRestaurants(userId.Value).FirstOrDefault(x => x.Id == id);
             if (existing is null)
             {
                 return Results.NotFound();
@@ -259,6 +282,7 @@ public static class Endpoints
             existing.BrandTone = request.BrandTone;
             existing.WebsiteUrl = request.WebsiteUrl;
             existing.LogoUrl = request.LogoUrl;
+            existing.UserId = userId.Value;
             store.UpsertRestaurant(existing);
             await store.SaveChangesAsync(ct);
             return Results.Ok(existing);

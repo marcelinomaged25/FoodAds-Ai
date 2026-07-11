@@ -10,11 +10,27 @@ public sealed class EfRepositoryStore : IRepositoryStore
 
     public EfRepositoryStore(FoodAdsAiDbContext db) => _db = db;
 
-    public IReadOnlyCollection<Restaurant> Restaurants => _db.Restaurants.AsNoTracking().OrderBy(x => x.Name).ToArray();
-    public IReadOnlyCollection<Campaign> Campaigns => _db.Campaigns.AsNoTracking().OrderByDescending(x => x.CreatedAt).ToArray();
+    public IReadOnlyCollection<Restaurant> GetRestaurants(Guid userId) => _db.Restaurants.AsNoTracking().Where(x => x.UserId == userId).OrderBy(x => x.Name).ToArray();
+    public IReadOnlyCollection<Campaign> GetCampaigns(Guid? userId = null)
+    {
+        var query = _db.Campaigns.AsNoTracking();
+        if (userId is not null)
+        {
+            query = query.Where(x => x.UserId == userId);
+        }
+        return query.OrderByDescending(x => x.CreatedAt).ToArray();
+    }
     public IReadOnlyCollection<GeneratedImage> GeneratedImages => _db.GeneratedImages.AsNoTracking().OrderByDescending(x => x.CreatedAt).ToArray();
-    public IReadOnlyCollection<PromptHistory> PromptHistory => _db.PromptHistory.AsNoTracking().OrderByDescending(x => x.CreatedAt).ToArray();
-    public IReadOnlyCollection<Favorite> Favorites => _db.Favorites.AsNoTracking().OrderByDescending(x => x.CreatedAt).ToArray();
+    public IReadOnlyCollection<PromptHistory> GetPromptHistory(Guid? userId = null)
+    {
+        var query = _db.PromptHistory.AsNoTracking();
+        if (userId is not null)
+        {
+            query = query.Where(x => x.UserId == userId);
+        }
+        return query.OrderByDescending(x => x.CreatedAt).ToArray();
+    }
+    public IReadOnlyCollection<Favorite> GetFavorites(Guid userId) => _db.Favorites.AsNoTracking().Where(x => x.UserId == userId).OrderByDescending(x => x.CreatedAt).ToArray();
 
     public void AddRestaurant(Restaurant restaurant) => _db.Restaurants.Add(restaurant);
 

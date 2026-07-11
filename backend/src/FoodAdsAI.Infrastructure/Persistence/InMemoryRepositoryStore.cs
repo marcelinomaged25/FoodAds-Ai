@@ -12,11 +12,13 @@ public sealed class InMemoryRepositoryStore : IRepositoryStore
     private readonly ConcurrentDictionary<Guid, PromptHistory> _promptHistory = new();
     private readonly ConcurrentDictionary<Guid, Favorite> _favorites = new();
 
-    public IReadOnlyCollection<Restaurant> Restaurants => _restaurants.Values.ToArray();
-    public IReadOnlyCollection<Campaign> Campaigns => _campaigns.Values.ToArray();
+    public IReadOnlyCollection<Restaurant> GetRestaurants(Guid userId) => _restaurants.Values.Where(x => x.UserId == userId).ToArray();
+    public IReadOnlyCollection<Campaign> GetCampaigns(Guid? userId = null)
+        => userId is null ? _campaigns.Values.ToArray() : _campaigns.Values.Where(x => x.UserId == userId).ToArray();
     public IReadOnlyCollection<GeneratedImage> GeneratedImages => _generatedImages.Values.ToArray();
-    public IReadOnlyCollection<PromptHistory> PromptHistory => _promptHistory.Values.ToArray();
-    public IReadOnlyCollection<Favorite> Favorites => _favorites.Values.ToArray();
+    public IReadOnlyCollection<PromptHistory> GetPromptHistory(Guid? userId = null)
+        => userId is null ? _promptHistory.Values.ToArray() : _promptHistory.Values.Where(x => x.UserId == userId).ToArray();
+    public IReadOnlyCollection<Favorite> GetFavorites(Guid userId) => _favorites.Values.Where(x => x.UserId == userId).ToArray();
 
     public void AddRestaurant(Restaurant restaurant) => _restaurants[restaurant.Id] = restaurant;
     public void UpsertRestaurant(Restaurant restaurant) => _restaurants[restaurant.Id] = restaurant;

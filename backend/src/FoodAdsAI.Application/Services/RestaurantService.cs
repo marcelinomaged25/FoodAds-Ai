@@ -10,15 +10,16 @@ public sealed class RestaurantService
 
     public RestaurantService(IRepositoryStore store) => _store = store;
 
-    public IReadOnlyCollection<RestaurantDto> GetAll()
-        => _store.Restaurants
+    public IReadOnlyCollection<RestaurantDto> GetAll(Guid userId)
+        => _store.GetRestaurants(userId)
             .Select(r => new RestaurantDto(r.Id, r.Name, r.CuisineType, r.BrandTone, r.WebsiteUrl, r.LogoUrl))
             .ToArray();
 
-    public async Task<RestaurantDto> CreateAsync(string name, string cuisineType, string brandTone, string? websiteUrl, string? logoUrl, CancellationToken cancellationToken = default)
+    public async Task<RestaurantDto> CreateAsync(Guid userId, string name, string cuisineType, string brandTone, string? websiteUrl, string? logoUrl, CancellationToken cancellationToken = default)
     {
         var restaurant = new Restaurant
         {
+            UserId = userId,
             Name = name,
             CuisineType = cuisineType,
             BrandTone = brandTone,

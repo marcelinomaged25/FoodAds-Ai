@@ -76,6 +76,15 @@ using (var scope = app.Services.CreateScope())
         ADD COLUMN IF NOT EXISTS "ImageBase64Data" text;
         """);
 
+    // Add per-user ownership columns for older databases.
+    await db.Database.ExecuteSqlRawAsync("""
+        ALTER TABLE "restaurants"
+        ADD COLUMN IF NOT EXISTS "UserId" uuid;
+
+        ALTER TABLE "campaigns"
+        ADD COLUMN IF NOT EXISTS "UserId" uuid;
+        """);
+
     // Default data seeding removed per user request
     // await FoodAdsAiDbSeeder.SeedAsync(db);
 }

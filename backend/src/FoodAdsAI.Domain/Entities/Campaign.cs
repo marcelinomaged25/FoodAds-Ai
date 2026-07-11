@@ -2,6 +2,7 @@ namespace FoodAdsAI.Domain.Entities;
 
 public sealed class Campaign : BaseEntity
 {
+    public Guid? UserId { get; set; }
     public Guid? RestaurantId { get; set; }
     public string Prompt { get; set; } = string.Empty;
     public string Headline { get; set; } = string.Empty;

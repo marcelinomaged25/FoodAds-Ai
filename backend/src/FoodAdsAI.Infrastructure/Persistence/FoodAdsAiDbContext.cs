@@ -128,12 +128,13 @@ public sealed class FoodAdsAiDbContext : DbContext
         var entity = modelBuilder.Entity<Restaurant>();
         entity.ToTable("restaurants");
         entity.HasKey(x => x.Id);
+        entity.Property(x => x.UserId);
         entity.Property(x => x.Name).HasMaxLength(160).IsRequired();
         entity.Property(x => x.CuisineType).HasMaxLength(120).IsRequired();
         entity.Property(x => x.BrandTone).HasMaxLength(80).IsRequired();
         entity.Property(x => x.WebsiteUrl).HasMaxLength(500);
         entity.Property(x => x.LogoUrl).HasMaxLength(500);
-        entity.HasIndex(x => x.Name);
+        entity.HasIndex(x => new { x.UserId, x.Name });
         ApplySoftDeleteFilter<Restaurant>(modelBuilder);
 
         entity.HasMany<Campaign>()
@@ -152,6 +153,7 @@ public sealed class FoodAdsAiDbContext : DbContext
         var entity = modelBuilder.Entity<Campaign>();
         entity.ToTable("campaigns");
         entity.HasKey(x => x.Id);
+        entity.Property(x => x.UserId);
         entity.Property(x => x.Prompt).HasMaxLength(2000).IsRequired();
         entity.Property(x => x.Headline).HasMaxLength(250).IsRequired();
         entity.Property(x => x.Caption).HasMaxLength(2000).IsRequired();
@@ -160,6 +162,7 @@ public sealed class FoodAdsAiDbContext : DbContext
         entity.Property(x => x.ImageFileName).HasMaxLength(300);
         entity.Property(x => x.ImageContentType).HasMaxLength(120);
         entity.Property(x => x.ImageBase64Data).HasColumnType("text");
+        entity.HasIndex(x => new { x.UserId, x.CreatedAt });
         entity.HasIndex(x => x.RestaurantId);
         ApplySoftDeleteFilter<Campaign>(modelBuilder);
 

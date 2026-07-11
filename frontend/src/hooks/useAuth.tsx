@@ -1,5 +1,6 @@
-import { createContext, useContext, useEffect, useMemo, useState, type ReactNode } from 'react';
+import { createContext, useContext, useEffect, useMemo, useRef, useState, type ReactNode } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { useQueryClient } from '@tanstack/react-query';
 import { foodAdsApi } from '../lib/api';
 import {
   clearSession,
@@ -24,9 +25,19 @@ const AuthContext = createContext<AuthContextValue | null>(null);
 
 export function AuthProvider({ children }: { children: ReactNode }) {
   const navigate = useNavigate();
+  const queryClient = useQueryClient();
   const [session, setLocalSession] = useState<AuthSession | null>(() => getSession());
+  const previousUserId = useRef<string | null>(getSession()?.userId ?? null);
 
   useEffect(() => subscribe(() => setLocalSession(getSession())), []);
+
+  useEffect(() => {
+    const nextUserId = session?.userId ?? null;
+    if (previousUserId.current !== nextUserId) {
+      queryClient.clear();
+      previousUserId.current = nextUserId;
+    }
+  }, [queryClient, session?.userId]);
 
   async function login(request: LoginRequest) {
     const nextSession = await foodAdsApi.login(request);
